@@ -98,15 +98,6 @@ Test-Suite spec
                       , safe == 0.3.*
                       , word8
 
-Test-Suite doctest
-  Type:                 exitcode-stdio-1.0
-  Default-Language:     Haskell2010
-  Hs-Source-Dirs:       test2
-  Ghc-Options:          -Wall
-  Main-Is:              doctests.hs
-  Build-Depends:        base
-                      , doctest
-
 Source-Repository head
   Type:                 git
   Location:             git://github.com/kazu-yamamoto/dns.git
