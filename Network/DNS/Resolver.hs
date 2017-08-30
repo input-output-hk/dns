@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP, OverloadedStrings #-}
+{-# LANGUAGE CPP, OverloadedStrings, BangPatterns #-}
 
 -- | DNS Resolver and generic (lower-level) lookup functions.
 module Network.DNS.Resolver (
@@ -38,11 +38,11 @@ import Network.DNS.Decode
 import Network.DNS.Encode
 import Network.DNS.Internal
 import qualified Data.ByteString.Char8 as BS
-import Network.Socket (HostName, Socket, SocketType(Stream, Datagram))
-import Network.Socket (AddrInfoFlag(..), AddrInfo(..), SockAddr(..))
-import Network.Socket (Family(AF_INET, AF_INET6), PortNumber(..))
-import Network.Socket (close, socket, connect, getPeerName, getAddrInfo)
-import Network.Socket (defaultHints, defaultProtocol)
+import Network.Socket (HostName, Socket, SocketType(Stream, Datagram),
+                       AddrInfoFlag(..), AddrInfo(..), SockAddr(..),
+                       Family(AF_INET, AF_INET6), PortNumber(..),
+                       close, socket, connect, getPeerName, getAddrInfo,
+                       defaultHints, defaultProtocol)
 import Prelude hiding (lookup)
 import System.Random (getStdRandom, random)
 import System.Timeout (timeout)
@@ -368,7 +368,7 @@ lookupRawInternal rcv ad rlv dom typ = do
         checkSeqno = check seqno
     loop query checkSeqno 0 False
   where
-    loop query checkSeqno cnt mismatch
+    loop query checkSeqno !cnt mismatch
       | cnt == retry = do
           let ret | mismatch  = SequenceNumberMismatch
                   | otherwise = RetryLimitReached
