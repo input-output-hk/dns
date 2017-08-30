@@ -107,6 +107,8 @@ data DNSError =
     SequenceNumberMismatch
     -- | The request simply timed out.
   | TimeoutExpired
+    -- | The request reached the number of valid retries allowed.
+  | RetryLimitReached
     -- | The answer has the correct sequence number, but returned an
     --   unexpected RDATA format.
   | UnexpectedRDATA
