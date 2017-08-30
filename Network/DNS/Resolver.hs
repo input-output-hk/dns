@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP, OverloadedStrings, BangPatterns #-}
+{-# LANGUAGE CPP, OverloadedStrings #-}
 
 -- | DNS Resolver and generic (lower-level) lookup functions.
 module Network.DNS.Resolver (
@@ -368,7 +368,9 @@ lookupRawInternal rcv ad rlv dom typ = do
         checkSeqno = check seqno
     loop query checkSeqno 0 False
   where
-    loop query checkSeqno !cnt mismatch
+    -- Note: is not necessary to make `cnt` strict with a bang pattern
+    -- as its value is demanded immediately in the guard.
+    loop query checkSeqno cnt mismatch
       | cnt == retry = do
           let ret | mismatch  = SequenceNumberMismatch
                   | otherwise = RetryLimitReached
